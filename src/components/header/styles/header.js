@@ -5,6 +5,7 @@ import defaultBackground from "../../../images/misc/home-bg.jpg";
 export const Background = styled.section`
   display: flex;
   flex-direction: column;
+  /* padding: 50px; */
   background: url(${defaultBackground}) top left / cover no-repeat;
 `;
 
