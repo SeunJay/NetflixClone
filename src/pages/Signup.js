@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { HeaderContainer } from "../containers/header";
 import { FootContainer } from "../containers/footer";
 import { Form } from "../components";
+import { FirebaseContext } from "../context/firebase";
+import * as ROUTES from "../constants/routes";
 
 const initialState = {
   firstName: "",
@@ -10,17 +13,52 @@ const initialState = {
 };
 
 const Signup = () => {
+  const history = useHistory();
+  const { firebase } = useContext(FirebaseContext);
   const [errors, setErrors] = useState("");
   const [formValues, setFormValues] = useState(initialState);
 
   const { firstName, email, password } = formValues;
 
-  const isInvalid = firstName || email === "" || password === "";
+  const isInvalid = firstName === "" || email === "" || password === "";
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("submitting...");
+    try {
+      const response = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
+
+      await response.user.updateProfile({
+        displayName: firstName,
+        photoURL: Math.floor(Math.random() * 5) + 1,
+      });
+
+      setFormValues(initialState);
+      setErrors("");
+      history.push(ROUTES.BROWSE);
+    } catch (error) {
+      setErrors(error.message);
+    }
+
+    // firebase
+    //   .auth()
+    //   .createUserWithEmailAndPassword(email, password)
+    //   .then((result) =>{
+    //     console.log(result)
+    //     result.user
+    //       .updateProfile({
+    //         displayName: firstName,
+    //         photoURL: Math.floor(Math.random() * 5) + 1,
+    //       })
+    //       .then(() => {
+    //         setFormValues(initialState);
+    //         setErrors("");
+    //         history.push(ROUTES.BROWSE);
+    //       })}
+    //   )
+    //   .catch((error) => setErrors(error.message));
   };
 
   const handleChange = (e) => {
@@ -41,7 +79,7 @@ const Signup = () => {
               onChange={handleChange}
               placeholder="First Name"
               value={firstName}
-              name="email"
+              name="firstName"
             />
             <Form.Input
               onChange={handleChange}

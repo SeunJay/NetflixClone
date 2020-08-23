@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { HeaderContainer } from "../containers/header";
 import { FootContainer } from "../containers/footer";
+import { FirebaseContext } from "../context/firebase";
 import { Form } from "../components";
+import * as ROUTES from "../constants/routes";
 
 const initialState = {
   email: "",
@@ -9,15 +12,25 @@ const initialState = {
 };
 
 const Signin = () => {
+  const history = useHistory();
+  const { firebase } = useContext(FirebaseContext);
   const [errors, setErrors] = useState("");
   const [formValues, setFormValues] = useState(initialState);
 
-  const isInvalid = (formValues.email === "") || (formValues.password === "");
+  const isInvalid = formValues.email === "" || formValues.password === "";
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("submitting...");
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+
+      setFormValues(initialState);
+      setErrors("");
+      history.push(ROUTES.BROWSE);
+    } catch (error) {
+      setErrors(error.message);
+    }
   };
 
   const handleChange = (e) => {
