@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import { Route } from "react-router-dom";
 import * as ROUTES from "./constants/routes";
 import { Home, Signin, Signup, Browse } from "./pages";
+// import { seedDatabase } from "./seed";
+// import { firebase } from "./index";
 
 function App() {
+  // seedDatabase(firebase);
+  // useEffect(() => {
+  //   seedDatabase(firebase)
+  // }, []);
   return (
     <Router>
       <Switch>

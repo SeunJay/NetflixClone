@@ -165,8 +165,6 @@ export const SearchInput = styled.input`
   width: ${({ active }) => (active === true ? "200px" : "0px")};
 `;
 
-
-
 export const Picture = styled.button`
   background: url(${({ src }) => src});
   background-size: contain;
@@ -175,8 +173,6 @@ export const Picture = styled.button`
   height: 32px;
   cursor: pointer;
 `;
-
-
 
 export const Dropdown = styled.div`
   display: none;
