@@ -1,18 +1,23 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Header, Loading } from "../components";
+import { Header, Loading, Card } from "../components";
 import * as ROUTES from "../constants/routes";
 import { FirebaseContext } from "../context/firebase";
 import { FootContainer } from "./footer";
 import { SelectProfileContainer } from "../containers/profiles";
-import joker1 from "../images/misc/joker1.jpg";
 import logo from "../images/misc/logo.svg";
 import profilePhoto from "../images/users/2.png";
 
-export function BrowseContainer() {
-  const [profile, setProfile] = useState({});
+const initObj = {
+  displayName: "Jay",
+  photoURL: "1",
+};
+
+export function BrowseContainer({ slides }) {
+  const [profile, setProfile] = useState(initObj);
   const [category, setCategory] = useState("series");
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [slideRows, setSlideRows] = useState([]);
 
   const { firebase } = useContext(FirebaseContext);
 
@@ -27,10 +32,16 @@ export function BrowseContainer() {
     }, 3000);
   }, [user]);
 
-  return user.displayName ? (
+  useEffect(() => {
+    setSlideRows(slides[category]);
+  }, [slides, category]);
+
+  const users = "users";
+
+  return profile.displayName ? (
     <>
-      {loading ? <Loading src={profilePhoto} /> : <Loading.ReleaseBody />}
-      <Header src={joker1} dontShowOnSmallViewPort>
+      {loading ? <Loading src={user.photoURL} /> : <Loading.ReleaseBody />}
+      <Header src="joker1" dontShowOnSmallViewPort>
         <Header.Frame>
           <Header.Group>
             <Header.Logo to={ROUTES.HOME} src={logo} alt="Netflix" />
@@ -56,10 +67,10 @@ export function BrowseContainer() {
             />
 
             <Header.Profile>
-              <Header.Picture src={profilePhoto} />
+              <Header.Picture src={require(`../images/${users}/2.png`)} />
               <Header.Dropdown>
                 <Header.Group>
-                  <Header.Picture src={profilePhoto} />
+                  <Header.Picture src={require(`../images/${users}/2.png`)} />
                   <Header.Link>{user.displayName}</Header.Link>
                 </Header.Group>
                 <Header.Group>
@@ -84,6 +95,27 @@ export function BrowseContainer() {
           <Header.PlayButton>Play</Header.PlayButton>
         </Header.Feature>
       </Header>
+
+      <Card.Group>
+        {slideRows.map((slideItem) => (
+          <Card key={`${category}-${slideItem.title.toLowerCase()}`}>
+            <Card.Title>{slideItem.title}</Card.Title>
+            <Card.Entities>
+              {slideItem.data.map((item) => (
+                <Card.Item key={item.docId} item={item}>
+                  <Card.Image
+                    src={require(`../images/${category}/${item.genre}/${item.slug}/small.jpg`)}
+                  />
+                  <Card.Meta>
+                    <Card.SubTitle>{item.title}</Card.SubTitle>
+                    <Card.Text>{item.description}</Card.Text>
+                  </Card.Meta>
+                </Card.Item>
+              ))}
+            </Card.Entities>
+          </Card>
+        ))}
+      </Card.Group>
       <FootContainer />
     </>
   ) : (

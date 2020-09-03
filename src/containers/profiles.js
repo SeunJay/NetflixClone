@@ -6,7 +6,6 @@ import loading from "../images/users/1.png"
 
 
 export const SelectProfileContainer = ({ user, setProfile }) => {
-  console.log(user.photoURL)
   return (
     <>
       <Header bg={false}>
@@ -25,7 +24,7 @@ export const SelectProfileContainer = ({ user, setProfile }) => {
               })
             }
           >
-            <Profiles.Picture src={loading} />
+            <Profiles.Picture src={user.photoURL} />
             <Profiles.Name>{user.displayName}</Profiles.Name>
           </Profiles.User>
         </Profiles.List>

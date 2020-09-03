@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { FirebaseContext } from "../context/firebase";
 
 function useContent(target) {
@@ -23,6 +23,8 @@ function useContent(target) {
 
     getContent();
   }, []);
+
+  // console.log(content)
 
   return { [target]: content };
 }

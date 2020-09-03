@@ -5,8 +5,9 @@ import defaultBackground from "../../../images/misc/home-bg.jpg";
 export const Background = styled.section`
   display: flex;
   flex-direction: column;
-  background: url(${({ src }) => (src ? src : defaultBackground)}) top left /
-    cover no-repeat;
+  background: url(${({ src }) =>
+      src ? require(`../../../images/misc/${src}.jpg`) : defaultBackground})
+    top left / cover no-repeat;
 
   @media (max-width: 1100px) {
     ${({ dontShowOnSmallViewPort }) =>
