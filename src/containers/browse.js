@@ -36,6 +36,8 @@ export function BrowseContainer({ slides }) {
     setSlideRows(slides[category]);
   }, [slides, category]);
 
+  console.log(slideRows);
+
   const users = "users";
 
   return profile.displayName ? (
@@ -101,17 +103,18 @@ export function BrowseContainer({ slides }) {
           <Card key={`${category}-${slideItem.title.toLowerCase()}`}>
             <Card.Title>{slideItem.title}</Card.Title>
             <Card.Entities>
-              {slideItem.data.map((item) => (
-                <Card.Item key={item.docId} item={item}>
-                  <Card.Image
+              {slideItem.data.length > 0 ?
+                slideItem.data.map((item) => (
+                  <Card.Item key={item.docId} item={item}>
+                    <Card.Image
                     src={require(`../images/${category}/${item.genre}/${item.slug}/small.jpg`)}
                   />
-                  <Card.Meta>
-                    <Card.SubTitle>{item.title}</Card.SubTitle>
-                    <Card.Text>{item.description}</Card.Text>
-                  </Card.Meta>
-                </Card.Item>
-              ))}
+                    <Card.Meta>
+                      <Card.SubTitle>{item.title}</Card.SubTitle>
+                      <Card.Text>{item.description}</Card.Text>
+                    </Card.Meta>
+                  </Card.Item>
+                )): <h1>No data</h1>}
             </Card.Entities>
           </Card>
         ))}

@@ -7,21 +7,36 @@ function useContent(target) {
   const { firebase } = useContext(FirebaseContext);
 
   useEffect(() => {
-    async function getContent() {
-      try {
-        const snapshots = await firebase.firestore().collection(target).get();
-        const allContent = await snapshots.docs.map((contentObj) => ({
+    // async function getContent() {
+    //   try {
+    //     const snapshots = await firebase.firestore().collection(target).get();
+    //     const allContent = await snapshots.docs.map((contentObj) => ({
+    //       ...contentObj.data(),
+    //       docId: contentObj.id,
+    //     }));
+
+    //     setContent(allContent);
+    //   } catch (error) {
+    //     console.log(error.message);
+    //   }
+    // }
+
+    // getContent();
+    firebase
+      .firestore()
+      .collection(target)
+      .get()
+      .then((snapshot) => {
+        const allContent = snapshot.docs.map((contentObj) => ({
           ...contentObj.data(),
           docId: contentObj.id,
         }));
 
         setContent(allContent);
-      } catch (error) {
+      })
+      .catch((error) => {
         console.log(error.message);
-      }
-    }
-
-    getContent();
+      });
   }, []);
 
   // console.log(content)

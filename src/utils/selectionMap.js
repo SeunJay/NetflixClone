@@ -1,6 +1,4 @@
 export default function selectionMap({ series, films }) {
-  console.log(Array.isArray(series))
-  console.log(Array.isArray(films));
   return {
     series: [
       {
